@@ -1,1 +1,266 @@
 
+Aqui está com CartList e todos os textos em inglês:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CartList</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: #222;
+}
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 20px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.header h1 {
+  font-size: 26px;
+  margin: 0;
+}
+.add-top-btn {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #22c55e;
+  color: white;
+  font-size: 30px;
+  line-height: 42px;
+  cursor: pointer;
+}
+.form-card {
+  display: none;
+  background: #fff;
+  padding: 16px;
+  border-radius: 18px;
+  box-shadow: 4px 6px 16px rgba(0,0,0,0.12);
+  margin-bottom: 22px;
+}
+.form-card input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  outline: none;
+}
+.add-item-btn {
+  margin-top: 12px;
+  float: right;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  background: #22c55e;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 30px;
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  padding: 14px;
+  border-radius: 16px;
+  box-shadow: 3px 5px 14px rgba(0,0,0,0.10);
+}
+.item input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+.item span {
+  flex: 1;
+  font-size: 17px;
+  word-break: break-word;
+}
+.item.checked span {
+  text-decoration: line-through;
+  color: #999;
+}
+.edit-btn {
+  border: none;
+  background: #facc15;
+  color: #222;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 15px;
+}
+.delete-btn {
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal {
+  width: 100%;
+  max-width: 340px;
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+.modal p {
+  font-size: 17px;
+  margin-bottom: 20px;
+}
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+}
+.modal-buttons button {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.no-btn { background: #e5e7eb; }
+.yes-btn {
+  background: #ef4444;
+  color: white;
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>CartList</h1>
+    <button class="add-top-btn" onclick="toggleForm()">+</button>
+  </div>
+  <div class="form-card" id="formCard">
+    <input type="text" id="itemInput" placeholder="Enter an item..." />
+    <button class="add-item-btn" id="addItemBtn" onclick="addOrUpdateItem()">Add</button>
+    <div style="clear: both;"></div>
+  </div>
+  <div class="list" id="shoppingList"></div>
+</div>
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <p>Do you really want to delete this item?</p>
+    <div class="modal-buttons">
+      <button class="no-btn" onclick="closeModal()">No</button>
+      <button class="yes-btn" onclick="confirmDelete()">Yes</button>
+    </div>
+  </div>
+</div>
+<script>
+let items = JSON.parse(localStorage.getItem("shoppingList")) || [];
+let itemToDelete = null;
+let editingIndex = null;
+function saveItems() {
+  localStorage.setItem("shoppingList", JSON.stringify(items));
+}
+function toggleForm() {
+  const form = document.getElementById("formCard");
+  form.style.display = form.style.display === "block" ? "none" : "block";
+  document.getElementById("itemInput").focus();
+}
+function addOrUpdateItem() {
+  const input = document.getElementById("itemInput");
+  const button = document.getElementById("addItemBtn");
+  const text = input.value.trim();
+  if (text === "") return;
+  if (editingIndex !== null) {
+    items[editingIndex].text = text;
+    editingIndex = null;
+    button.textContent = "Add";
+  } else {
+    items.push({
+      text: text,
+      checked: false
+    });
+  }
+  input.value = "";
+  saveItems();
+  renderItems();
+}
+function renderItems() {
+  const list = document.getElementById("shoppingList");
+  list.innerHTML = "";
+  items.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "item" + (item.checked ? " checked" : "");
+    div.innerHTML = `
+      <input type="checkbox" ${item.checked ? "checked" : ""} onchange="toggleCheck(${index})">
+      <span>${item.text}</span>
+      <button class="edit-btn" onclick="editItem(${index})">✏️</button>
+      <button class="delete-btn" onclick="openModal(${index})">Delete</button>
+    `;
+    list.appendChild(div);
+  });
+}
+function toggleCheck(index) {
+  items[index].checked = !items[index].checked;
+  saveItems();
+  renderItems();
+}
+function editItem(index) {
+  const form = document.getElementById("formCard");
+  const input = document.getElementById("itemInput");
+  const button = document.getElementById("addItemBtn");
+  form.style.display = "block";
+  input.value = items[index].text;
+  input.focus();
+  editingIndex = index;
+  button.textContent = "Save edit";
+}
+function openModal(index) {
+  itemToDelete = index;
+  document.getElementById("modalBg").style.display = "flex";
+}
+function closeModal() {
+  itemToDelete = null;
+  document.getElementById("modalBg").style.display = "none";
+}
+function confirmDelete() {
+  if (itemToDelete !== null) {
+    items.splice(itemToDelete, 1);
+    if (editingIndex === itemToDelete) {
+      editingIndex = null;
+      document.getElementById("itemInput").value = "";
+      document.getElementById("addItemBtn").textContent = "Add";
+    }
+    saveItems();
+    renderItems();
+  }
+  closeModal();
+}
+renderItems();
+</script>
+</body>
+</html>
