@@ -31,6 +31,21 @@ body {
   font-size: 26px;
   margin: 0;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.clear-all-btn {
+  border: none;
+  border-radius: 14px;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
 .add-top-btn {
   width: 42px;
   height: 42px;
@@ -160,7 +175,10 @@ body {
 <div class="app">
   <div class="header">
     <h1>CartList</h1>
-    <button class="add-top-btn" onclick="toggleForm()">+</button>
+    <div class="header-actions">
+      <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
+      <button class="add-top-btn" onclick="toggleForm()">+</button>
+    </div>
   </div>
   <div class="form-card" id="formCard">
     <input type="text" id="itemInput" placeholder="Enter an item..." />
@@ -171,10 +189,10 @@ body {
 </div>
 <div class="modal-bg" id="modalBg">
   <div class="modal">
-    <p>Do you really want to delete this item?</p>
+    <p id="modalText">Do you really want to delete this item?</p>
     <div class="modal-buttons">
       <button class="no-btn" onclick="closeModal()">No</button>
-      <button class="yes-btn" onclick="confirmDelete()">Yes</button>
+      <button class="yes-btn" onclick="confirmAction()">Yes</button>
     </div>
   </div>
 </div>
@@ -182,6 +200,7 @@ body {
 let items = JSON.parse(localStorage.getItem("shoppingList")) || [];
 let itemToDelete = null;
 let editingIndex = null;
+let actionType = null;
 function saveItems() {
   localStorage.setItem("shoppingList", JSON.stringify(items));
 }
@@ -219,7 +238,7 @@ function renderItems() {
       <input type="checkbox" ${item.checked ? "checked" : ""} onchange="toggleCheck(${index})">
       <span>${item.text}</span>
       <button class="edit-btn" onclick="editItem(${index})">✏️</button>
-      <button class="delete-btn" onclick="openModal(${index})">Delete</button>
+      <button class="delete-btn" onclick="openDeleteModal(${index})">Delete</button>
     `;
     list.appendChild(div);
   });
@@ -239,25 +258,35 @@ function editItem(index) {
   editingIndex = index;
   button.textContent = "Save edit";
 }
-function openModal(index) {
+function openDeleteModal(index) {
+  actionType = "single";
   itemToDelete = index;
+  document.getElementById("modalText").textContent = "Do you really want to delete this item?";
+  document.getElementById("modalBg").style.display = "flex";
+}
+function openClearAllModal() {
+  if (items.length === 0) return;
+  actionType = "all";
+  document.getElementById("modalText").textContent = "Do you really want to delete all items?";
   document.getElementById("modalBg").style.display = "flex";
 }
 function closeModal() {
   itemToDelete = null;
+  actionType = null;
   document.getElementById("modalBg").style.display = "none";
 }
-function confirmDelete() {
-  if (itemToDelete !== null) {
+function confirmAction() {
+  if (actionType === "single" && itemToDelete !== null) {
     items.splice(itemToDelete, 1);
-    if (editingIndex === itemToDelete) {
-      editingIndex = null;
-      document.getElementById("itemInput").value = "";
-      document.getElementById("addItemBtn").textContent = "Add";
-    }
-    saveItems();
-    renderItems();
   }
+  if (actionType === "all") {
+    items = [];
+  }
+  editingIndex = null;
+  document.getElementById("itemInput").value = "";
+  document.getElementById("addItemBtn").textContent = "Add";
+  saveItems();
+  renderItems();
   closeModal();
 }
 renderItems();
