@@ -27,7 +27,7 @@ body {
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
-  padding: 108px 14px 14px;
+  padding: 144px 14px 14px;
 }
 .header {
   position: fixed;
@@ -59,10 +59,12 @@ body {
   gap: 4px;
   flex-wrap: nowrap;
 }
-.list-selector-row {
+.list-selector-row,
+.backup-row {
   display: flex;
   gap: 6px;
   align-items: center;
+  margin-top: 6px;
 }
 .list-select {
   flex: 1;
@@ -75,7 +77,9 @@ body {
 }
 .new-list-btn,
 .rename-list-btn,
-.delete-list-btn {
+.delete-list-btn,
+.export-backup-btn,
+.import-backup-btn {
   border: none;
   border-radius: 8px;
   height: 30px;
@@ -96,6 +100,14 @@ body {
 .delete-list-btn {
   background: #fee2e2;
   color: #b91c1c;
+}
+.export-backup-btn {
+  background: #fef9c3;
+  color: #854d0e;
+}
+.import-backup-btn {
+  background: #ede9fe;
+  color: #5b21b6;
 }
 .clear-all-btn,
 .delete-checked-btn {
@@ -242,6 +254,9 @@ body {
   background: #ef4444;
   color: white;
 }
+.hidden-file-input {
+  display: none;
+}
 </style>
 </head>
 <body>
@@ -259,6 +274,11 @@ body {
     <button class="new-list-btn" onclick="createNewList()">+ List</button>
     <button class="rename-list-btn" onclick="renameCurrentList()">Rename</button>
     <button class="delete-list-btn" onclick="openDeleteListModal()">Delete</button>
+  </div>
+  <div class="backup-row">
+    <button class="export-backup-btn" onclick="exportBackup()">Export Backup</button>
+    <button class="import-backup-btn" onclick="openImportBackup()">Import Backup</button>
+    <input class="hidden-file-input" type="file" id="backupFileInput" accept=".json,application/json" onchange="importBackup(event)">
   </div>
 </div>
 <div class="app">
@@ -506,6 +526,63 @@ function confirmAction() {
   saveItems();
   renderItems();
   closeModal();
+}
+function exportBackup() {
+  const backupData = {
+    app: "CartList",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    activeListId: activeListId,
+    lists: savedLists
+  };
+  const json = JSON.stringify(backupData, null, 2);
+  const blob = new Blob([json], {
+    type: "application/json"
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const date = new Date().toISOString().slice(0, 10);
+  link.href = url;
+  link.download = `cartlist-backup-${date}.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+function openImportBackup() {
+  document.getElementById("backupFileInput").click();
+}
+function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const backup = JSON.parse(e.target.result);
+      if (!backup.lists || !Array.isArray(backup.lists)) {
+        alert("Invalid backup file.");
+        return;
+      }
+      savedLists = backup.lists;
+      activeListId = backup.activeListId || savedLists[0].id;
+      if (!savedLists.find(list => list.id === activeListId)) {
+        activeListId = savedLists[0].id;
+      }
+      editingIndex = null;
+      itemToDelete = null;
+      actionType = null;
+      document.getElementById("itemInput").value = "";
+      document.getElementById("addItemBtn").textContent = "Add";
+      saveItems();
+      renderListSelect();
+      renderItems();
+      alert("Backup imported successfully.");
+    } catch (error) {
+      alert("Could not import this backup file.");
+    }
+    event.target.value = "";
+  };
+  reader.readAsText(file);
 }
 document
   .getElementById("itemInput")
