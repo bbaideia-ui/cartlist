@@ -1,4 +1,4 @@
-Aqui está a versão atualizada: nome menor, botões menores, tudo em uma linha, e topo sem ficar fixo.
+Agora sim: mantive 🗑 Delete Selected, deixei tudo menor e em uma linha. Também removi qualquer chance de menu fixo.
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,38 +25,37 @@ body {
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
-  padding: 16px;
-  min-height: 100vh;
-  overflow: visible;
+  padding: 14px;
 }
 .header {
-  position: static !important;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  margin-bottom: 18px;
+  gap: 5px;
+  margin-bottom: 16px;
 }
 .header h1 {
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
   white-space: nowrap;
 }
 .header-actions {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   flex-wrap: nowrap;
 }
 .clear-all-btn,
 .delete-checked-btn {
   border: none;
-  border-radius: 9px;
-  padding: 6px 7px;
-  font-size: 10px;
+  border-radius: 8px;
+  padding: 5px 5px;
+  font-size: 9px;
   font-weight: bold;
   cursor: pointer;
-  height: 30px;
+  height: 28px;
   white-space: nowrap;
 }
 .delete-checked-btn {
@@ -68,15 +67,15 @@ body {
   color: #b91c1c;
 }
 .add-top-btn {
-  width: 30px;
-  height: 30px;
-  min-width: 30px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
   border: none;
   border-radius: 50%;
   background: #22c55e;
   color: white;
-  font-size: 22px;
-  line-height: 30px;
+  font-size: 20px;
+  line-height: 28px;
   cursor: pointer;
 }
 .form-card {
@@ -111,8 +110,6 @@ body {
   flex-direction: column;
   gap: 12px;
   padding-bottom: 30px;
-  overflow: visible !important;
-  max-height: none !important;
 }
 .item {
   display: flex;
@@ -200,7 +197,7 @@ body {
   <div class="header">
     <h1>CartList</h1>
     <div class="header-actions">
-      <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Selected</button>
+      <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Delete Selected</button>
       <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
       <button class="add-top-btn" onclick="toggleForm()">+</button>
     </div>
@@ -348,5 +345,3 @@ renderItems();
 </script>
 </body>
 </html>
-
-O botão agora ficou menor como 🗑 Selected para caber melhor na mesma linha.
