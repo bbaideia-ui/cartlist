@@ -6,7 +6,9 @@
 <title>CartList</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 html, body {
   margin: 0;
@@ -27,20 +29,24 @@ body {
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
-  padding: 14px;
+  padding: 72px 14px 14px;
 }
 
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  z-index: 999;
   background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 5px;
-  margin-bottom: 16px;
-  padding: 8px 0;
+  padding: 10px 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
 .header h1 {
@@ -213,7 +219,9 @@ body {
   cursor: pointer;
 }
 
-.no-btn { background: #e5e7eb; }
+.no-btn {
+  background: #e5e7eb;
+}
 
 .yes-btn {
   background: #ef4444;
@@ -223,31 +231,40 @@ body {
 </head>
 
 <body>
-<div class="app">
-  <div class="header">
-    <h1>CartList</h1>
 
-    <div class="header-actions">
-      <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Delete Selected</button>
-      <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
-      <button class="add-top-btn" onclick="toggleForm()">+</button>
-    </div>
+<div class="header">
+  <h1>CartList</h1>
+
+  <div class="header-actions">
+    <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Delete Selected</button>
+
+    <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
+
+    <button class="add-top-btn" onclick="toggleForm()">+</button>
   </div>
+</div>
+
+<div class="app">
 
   <div class="form-card" id="formCard">
     <input type="text" id="itemInput" placeholder="Enter an item..." />
+
     <button class="add-item-btn" id="addItemBtn" onclick="addOrUpdateItem()">Add</button>
+
     <div style="clear: both;"></div>
   </div>
 
   <div class="list" id="shoppingList"></div>
+
 </div>
 
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <p id="modalText">Do you really want to delete this item?</p>
+
     <div class="modal-buttons">
       <button class="no-btn" onclick="closeModal()">No</button>
+
       <button class="yes-btn" onclick="confirmAction()">Yes</button>
     </div>
   </div>
@@ -255,6 +272,7 @@ body {
 
 <script>
 let items = JSON.parse(localStorage.getItem("shoppingList")) || [];
+
 let itemToDelete = null;
 let editingIndex = null;
 let actionType = null;
@@ -265,13 +283,18 @@ function saveItems() {
 
 function toggleForm() {
   const form = document.getElementById("formCard");
-  form.style.display = form.style.display === "block" ? "none" : "block";
+
+  form.style.display =
+    form.style.display === "block" ? "none" : "block";
+
   document.getElementById("itemInput").focus();
 }
 
 function addOrUpdateItem() {
   const input = document.getElementById("itemInput");
+
   const button = document.getElementById("addItemBtn");
+
   const text = input.value.trim();
 
   if (text === "") {
@@ -281,15 +304,23 @@ function addOrUpdateItem() {
 
   if (editingIndex !== null) {
     items[editingIndex].text = text;
+
     editingIndex = null;
+
     button.textContent = "Add";
   } else {
-    items.push({ text: text, checked: false });
+    items.push({
+      text: text,
+      checked: false
+    });
   }
 
   input.value = "";
+
   saveItems();
+
   renderItems();
+
   input.focus();
 }
 
@@ -307,17 +338,38 @@ function escapeHTML(text) {
 
 function renderItems() {
   const list = document.getElementById("shoppingList");
+
   list.innerHTML = "";
 
   items.forEach((item, index) => {
+
     const div = document.createElement("div");
-    div.className = "item" + (item.checked ? " checked" : "");
+
+    div.className =
+      "item" + (item.checked ? " checked" : "");
 
     div.innerHTML = `
-      <input type="checkbox" ${item.checked ? "checked" : ""} onchange="toggleCheck(${index})">
+      <input
+        type="checkbox"
+        ${item.checked ? "checked" : ""}
+        onchange="toggleCheck(${index})"
+      >
+
       <span>${escapeHTML(item.text)}</span>
-      <button class="edit-btn" onclick="editItem(${index})">✏️</button>
-      <button class="delete-btn" onclick="openDeleteModal(${index})">Delete</button>
+
+      <button
+        class="edit-btn"
+        onclick="editItem(${index})"
+      >
+        ✏️
+      </button>
+
+      <button
+        class="delete-btn"
+        onclick="openDeleteModal(${index})"
+      >
+        Delete
+      </button>
     `;
 
     list.appendChild(div);
@@ -326,59 +378,86 @@ function renderItems() {
 
 function toggleCheck(index) {
   items[index].checked = !items[index].checked;
+
   saveItems();
+
   renderItems();
 }
 
 function editItem(index) {
   const form = document.getElementById("formCard");
+
   const input = document.getElementById("itemInput");
+
   const button = document.getElementById("addItemBtn");
 
   form.style.display = "block";
+
   input.value = items[index].text;
+
   input.focus();
 
   editingIndex = index;
+
   button.textContent = "Save edit";
 }
 
 function openDeleteModal(index) {
   actionType = "single";
+
   itemToDelete = index;
-  document.getElementById("modalText").textContent = "Do you really want to delete this item?";
-  document.getElementById("modalBg").style.display = "flex";
+
+  document.getElementById("modalText").textContent =
+    "Do you really want to delete this item?";
+
+  document.getElementById("modalBg").style.display =
+    "flex";
 }
 
 function openDeleteCheckedModal() {
-  const selectedCount = items.filter(item => item.checked).length;
+
+  const selectedCount =
+    items.filter(item => item.checked).length;
+
   if (selectedCount === 0) return;
 
   actionType = "checked";
+
   document.getElementById("modalText").textContent =
     `Do you really want to delete ${selectedCount} selected item${selectedCount > 1 ? "s" : ""}?`;
 
-  document.getElementById("modalBg").style.display = "flex";
+  document.getElementById("modalBg").style.display =
+    "flex";
 }
 
 function openClearAllModal() {
+
   if (items.length === 0) return;
 
   actionType = "all";
+
   document.getElementById("modalText").textContent =
     `Do you really want to delete all ${items.length} item${items.length > 1 ? "s" : ""}?`;
 
-  document.getElementById("modalBg").style.display = "flex";
+  document.getElementById("modalBg").style.display =
+    "flex";
 }
 
 function closeModal() {
   itemToDelete = null;
+
   actionType = null;
-  document.getElementById("modalBg").style.display = "none";
+
+  document.getElementById("modalBg").style.display =
+    "none";
 }
 
 function confirmAction() {
-  if (actionType === "single" && itemToDelete !== null) {
+
+  if (
+    actionType === "single" &&
+    itemToDelete !== null
+  ) {
     items.splice(itemToDelete, 1);
   }
 
@@ -391,22 +470,32 @@ function confirmAction() {
   }
 
   editingIndex = null;
+
   document.getElementById("itemInput").value = "";
-  document.getElementById("addItemBtn").textContent = "Add";
+
+  document.getElementById("addItemBtn").textContent =
+    "Add";
 
   saveItems();
+
   renderItems();
+
   closeModal();
 }
 
-document.getElementById("itemInput").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    addOrUpdateItem();
-  }
+document
+  .getElementById("itemInput")
+  .addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      addOrUpdateItem();
+    }
 });
 
 renderItems();
 </script>
+
 </body>
 </html>
