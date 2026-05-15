@@ -1,5 +1,7 @@
 
 
+Aqui está atualizado com a mensagem mostrando o número de itens selecionados:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -288,16 +290,18 @@ function openDeleteModal(index) {
   document.getElementById("modalBg").style.display = "flex";
 }
 function openDeleteCheckedModal() {
-  const hasCheckedItems = items.some(item => item.checked);
-  if (!hasCheckedItems) return;
+  const selectedCount = items.filter(item => item.checked).length;
+  if (selectedCount === 0) return;
   actionType = "checked";
-  document.getElementById("modalText").textContent = "Do you really want to delete checked items?";
+  document.getElementById("modalText").textContent =
+    `Do you really want to delete ${selectedCount} selected item${selectedCount > 1 ? "s" : ""}?`;
   document.getElementById("modalBg").style.display = "flex";
 }
 function openClearAllModal() {
   if (items.length === 0) return;
   actionType = "all";
-  document.getElementById("modalText").textContent = "Do you really want to delete all items?";
+  document.getElementById("modalText").textContent =
+    `Do you really want to delete all ${items.length} item${items.length > 1 ? "s" : ""}?`;
   document.getElementById("modalBg").style.display = "flex";
 }
 function closeModal() {
@@ -332,4 +336,3 @@ renderItems();
 </script>
 </body>
 </html>
-
