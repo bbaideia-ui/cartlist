@@ -1,13 +1,13 @@
-Agora sim: mantive 🗑 Delete Selected, deixei tudo menor e em uma linha. Também removi qualquer chance de menu fixo.
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CartList</title>
+
 <style>
 * { box-sizing: border-box; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -16,37 +16,46 @@ html, body {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
 body {
   font-family: Arial, sans-serif;
   background: #ffffff;
   color: #222;
 }
+
 .app {
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
   padding: 14px;
 }
+
 .header {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 5px;
   margin-bottom: 16px;
+  padding: 8px 0;
 }
+
 .header h1 {
   font-size: 16px;
   margin: 0;
   white-space: nowrap;
 }
+
 .header-actions {
-  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
   flex-wrap: nowrap;
 }
+
 .clear-all-btn,
 .delete-checked-btn {
   border: none;
@@ -58,14 +67,17 @@ body {
   height: 28px;
   white-space: nowrap;
 }
+
 .delete-checked-btn {
   background: #fff7ed;
   color: #c2410c;
 }
+
 .clear-all-btn {
   background: #fee2e2;
   color: #b91c1c;
 }
+
 .add-top-btn {
   width: 28px;
   height: 28px;
@@ -78,6 +90,7 @@ body {
   line-height: 28px;
   cursor: pointer;
 }
+
 .form-card {
   display: none;
   background: #fff;
@@ -86,6 +99,7 @@ body {
   box-shadow: 4px 6px 16px rgba(0,0,0,0.12);
   margin-bottom: 22px;
 }
+
 .form-card input {
   width: 100%;
   padding: 14px;
@@ -94,6 +108,7 @@ body {
   font-size: 16px;
   outline: none;
 }
+
 .add-item-btn {
   margin-top: 12px;
   float: right;
@@ -105,12 +120,14 @@ body {
   font-size: 15px;
   cursor: pointer;
 }
+
 .list {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding-bottom: 30px;
 }
+
 .item {
   display: flex;
   align-items: center;
@@ -120,20 +137,24 @@ body {
   border-radius: 16px;
   box-shadow: 3px 5px 14px rgba(0,0,0,0.10);
 }
+
 .item input[type="checkbox"] {
   width: 22px;
   height: 22px;
   cursor: pointer;
 }
+
 .item span {
   flex: 1;
   font-size: 17px;
   word-break: break-word;
 }
+
 .item.checked span {
   text-decoration: line-through;
   color: #999;
 }
+
 .edit-btn {
   border: none;
   background: #facc15;
@@ -143,6 +164,7 @@ body {
   cursor: pointer;
   font-size: 15px;
 }
+
 .delete-btn {
   border: none;
   background: #ef4444;
@@ -151,6 +173,7 @@ body {
   padding: 8px 10px;
   cursor: pointer;
 }
+
 .modal-bg {
   display: none;
   position: fixed;
@@ -160,6 +183,7 @@ body {
   justify-content: center;
   padding: 20px;
 }
+
 .modal {
   width: 100%;
   max-width: 340px;
@@ -169,14 +193,17 @@ body {
   text-align: center;
   box-shadow: 0 12px 30px rgba(0,0,0,0.2);
 }
+
 .modal p {
   font-size: 17px;
   margin-bottom: 20px;
 }
+
 .modal-buttons {
   display: flex;
   gap: 12px;
 }
+
 .modal-buttons button {
   flex: 1;
   border: none;
@@ -185,30 +212,37 @@ body {
   font-size: 15px;
   cursor: pointer;
 }
+
 .no-btn { background: #e5e7eb; }
+
 .yes-btn {
   background: #ef4444;
   color: white;
 }
 </style>
 </head>
+
 <body>
 <div class="app">
   <div class="header">
     <h1>CartList</h1>
+
     <div class="header-actions">
       <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Delete Selected</button>
       <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
       <button class="add-top-btn" onclick="toggleForm()">+</button>
     </div>
   </div>
+
   <div class="form-card" id="formCard">
     <input type="text" id="itemInput" placeholder="Enter an item..." />
     <button class="add-item-btn" id="addItemBtn" onclick="addOrUpdateItem()">Add</button>
     <div style="clear: both;"></div>
   </div>
+
   <div class="list" id="shoppingList"></div>
 </div>
+
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <p id="modalText">Do you really want to delete this item?</p>
@@ -218,27 +252,33 @@ body {
     </div>
   </div>
 </div>
+
 <script>
 let items = JSON.parse(localStorage.getItem("shoppingList")) || [];
 let itemToDelete = null;
 let editingIndex = null;
 let actionType = null;
+
 function saveItems() {
   localStorage.setItem("shoppingList", JSON.stringify(items));
 }
+
 function toggleForm() {
   const form = document.getElementById("formCard");
   form.style.display = form.style.display === "block" ? "none" : "block";
   document.getElementById("itemInput").focus();
 }
+
 function addOrUpdateItem() {
   const input = document.getElementById("itemInput");
   const button = document.getElementById("addItemBtn");
   const text = input.value.trim();
+
   if (text === "") {
     input.focus();
     return;
   }
+
   if (editingIndex !== null) {
     items[editingIndex].text = text;
     editingIndex = null;
@@ -246,11 +286,13 @@ function addOrUpdateItem() {
   } else {
     items.push({ text: text, checked: false });
   }
+
   input.value = "";
   saveItems();
   renderItems();
   input.focus();
 }
+
 function escapeHTML(text) {
   return text.replace(/[&<>"']/g, function(match) {
     return {
@@ -262,85 +304,108 @@ function escapeHTML(text) {
     }[match];
   });
 }
+
 function renderItems() {
   const list = document.getElementById("shoppingList");
   list.innerHTML = "";
+
   items.forEach((item, index) => {
     const div = document.createElement("div");
     div.className = "item" + (item.checked ? " checked" : "");
+
     div.innerHTML = `
       <input type="checkbox" ${item.checked ? "checked" : ""} onchange="toggleCheck(${index})">
       <span>${escapeHTML(item.text)}</span>
       <button class="edit-btn" onclick="editItem(${index})">✏️</button>
       <button class="delete-btn" onclick="openDeleteModal(${index})">Delete</button>
     `;
+
     list.appendChild(div);
   });
 }
+
 function toggleCheck(index) {
   items[index].checked = !items[index].checked;
   saveItems();
   renderItems();
 }
+
 function editItem(index) {
   const form = document.getElementById("formCard");
   const input = document.getElementById("itemInput");
   const button = document.getElementById("addItemBtn");
+
   form.style.display = "block";
   input.value = items[index].text;
   input.focus();
+
   editingIndex = index;
   button.textContent = "Save edit";
 }
+
 function openDeleteModal(index) {
   actionType = "single";
   itemToDelete = index;
   document.getElementById("modalText").textContent = "Do you really want to delete this item?";
   document.getElementById("modalBg").style.display = "flex";
 }
+
 function openDeleteCheckedModal() {
   const selectedCount = items.filter(item => item.checked).length;
   if (selectedCount === 0) return;
+
   actionType = "checked";
   document.getElementById("modalText").textContent =
     `Do you really want to delete ${selectedCount} selected item${selectedCount > 1 ? "s" : ""}?`;
+
   document.getElementById("modalBg").style.display = "flex";
 }
+
 function openClearAllModal() {
   if (items.length === 0) return;
+
   actionType = "all";
   document.getElementById("modalText").textContent =
     `Do you really want to delete all ${items.length} item${items.length > 1 ? "s" : ""}?`;
+
   document.getElementById("modalBg").style.display = "flex";
 }
+
 function closeModal() {
   itemToDelete = null;
   actionType = null;
   document.getElementById("modalBg").style.display = "none";
 }
+
 function confirmAction() {
   if (actionType === "single" && itemToDelete !== null) {
     items.splice(itemToDelete, 1);
   }
+
   if (actionType === "checked") {
     items = items.filter(item => !item.checked);
   }
+
   if (actionType === "all") {
     items = [];
   }
+
   editingIndex = null;
   document.getElementById("itemInput").value = "";
   document.getElementById("addItemBtn").textContent = "Add";
+
   saveItems();
   renderItems();
   closeModal();
 }
+
 document.getElementById("itemInput").addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     event.preventDefault();
     addOrUpdateItem();
   }
 });
+
 renderItems();
 </script>
 </body>
