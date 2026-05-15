@@ -1,5 +1,9 @@
 
-Sim — aqui está corrigido. Eu forcei o menu a não ficar fixo e a página inteira rolar junto com a lista.
+Entendi. Use este código completo. Agora:
+
+* Delete Selected fica à esquerda de Clear All
+* o topo não fica fixo
+* a página inteira rola junto com a lista
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,8 +15,11 @@ Sim — aqui está corrigido. Eu forcei o menu a não ficar fixo e a página int
 * { box-sizing: border-box; }
 html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
   min-height: 100%;
   height: auto;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 body {
@@ -22,30 +29,37 @@ body {
 }
 .app {
   max-width: 480px;
+  width: 100%;
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 100dvh;
   height: auto;
   overflow: visible;
   padding: 20px;
 }
 .header {
-  position: static;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  position: static !important;
+  display: block;
   margin-bottom: 25px;
-  gap: 12px;
 }
 .header h1 {
   font-size: 26px;
-  margin: 0;
+  margin: 0 0 14px 0;
 }
 .header-actions {
-  display: flex;
-  align-items: center;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 42px;
   gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  align-items: center;
+}
+.delete-checked-btn {
+  order: 1;
+}
+.clear-all-btn {
+  order: 2;
+}
+.add-top-btn {
+  order: 3;
 }
 .clear-all-btn,
 .delete-checked-btn {
@@ -53,10 +67,11 @@ body {
   border-radius: 14px;
   background: #fee2e2;
   color: #b91c1c;
-  padding: 10px 12px;
-  font-size: 13px;
+  padding: 10px 8px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
+  height: 42px;
 }
 .delete-checked-btn {
   background: #fff7ed;
@@ -105,6 +120,7 @@ body {
   flex-direction: column;
   gap: 12px;
   padding-bottom: 30px;
+  height: auto;
   max-height: none;
   overflow: visible;
 }
@@ -345,5 +361,3 @@ renderItems();
 </script>
 </body>
 </html>
-
-A mudança principal foi aqui: html, body, .app, .header e .list agora estão configurados para a página inteira rolar, não só a lista.
