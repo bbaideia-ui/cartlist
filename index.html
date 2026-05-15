@@ -1,4 +1,5 @@
 
+Sim — aqui está corrigido. Eu forcei o menu a não ficar fixo e a página inteira rolar junto com a lista.
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,8 +9,13 @@
 <title>CartList</title>
 <style>
 * { box-sizing: border-box; }
-body {
+html, body {
   margin: 0;
+  min-height: 100%;
+  height: auto;
+  overflow-y: auto;
+}
+body {
   font-family: Arial, sans-serif;
   background: #ffffff;
   color: #222;
@@ -18,12 +24,15 @@ body {
   max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
+  height: auto;
+  overflow: visible;
   padding: 20px;
 }
 .header {
+  position: static;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 25px;
   gap: 12px;
 }
@@ -96,6 +105,8 @@ body {
   flex-direction: column;
   gap: 12px;
   padding-bottom: 30px;
+  max-height: none;
+  overflow: visible;
 }
 .item {
   display: flex;
@@ -334,3 +345,5 @@ renderItems();
 </script>
 </body>
 </html>
+
+A mudança principal foi aqui: html, body, .app, .header e .list agora estão configurados para a página inteira rolar, não só a lista.
