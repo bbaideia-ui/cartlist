@@ -1,9 +1,4 @@
-
-Entendi. Use este código completo. Agora:
-
-* Delete Selected fica à esquerda de Clear All
-* o topo não fica fixo
-* a página inteira rola junto com a lista
+Aqui está a versão atualizada: nome menor, botões menores, tudo em uma linha, e topo sem ficar fixo.
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +13,6 @@ html, body {
   padding: 0;
   width: 100%;
   min-height: 100%;
-  height: auto;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -31,61 +25,58 @@ body {
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
-  min-height: 100dvh;
-  height: auto;
+  padding: 16px;
+  min-height: 100vh;
   overflow: visible;
-  padding: 20px;
 }
 .header {
   position: static !important;
-  display: block;
-  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 18px;
 }
 .header h1 {
-  font-size: 26px;
-  margin: 0 0 14px 0;
+  font-size: 18px;
+  margin: 0;
+  white-space: nowrap;
 }
 .header-actions {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 42px;
-  gap: 8px;
+  display: flex;
   align-items: center;
-}
-.delete-checked-btn {
-  order: 1;
-}
-.clear-all-btn {
-  order: 2;
-}
-.add-top-btn {
-  order: 3;
+  gap: 5px;
+  flex-wrap: nowrap;
 }
 .clear-all-btn,
 .delete-checked-btn {
   border: none;
-  border-radius: 14px;
-  background: #fee2e2;
-  color: #b91c1c;
-  padding: 10px 8px;
-  font-size: 12px;
+  border-radius: 9px;
+  padding: 6px 7px;
+  font-size: 10px;
   font-weight: bold;
   cursor: pointer;
-  height: 42px;
+  height: 30px;
+  white-space: nowrap;
 }
 .delete-checked-btn {
   background: #fff7ed;
   color: #c2410c;
 }
+.clear-all-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
 .add-top-btn {
-  width: 42px;
-  height: 42px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
   border: none;
   border-radius: 50%;
   background: #22c55e;
   color: white;
-  font-size: 30px;
-  line-height: 42px;
+  font-size: 22px;
+  line-height: 30px;
   cursor: pointer;
 }
 .form-card {
@@ -120,9 +111,8 @@ body {
   flex-direction: column;
   gap: 12px;
   padding-bottom: 30px;
-  height: auto;
-  max-height: none;
-  overflow: visible;
+  overflow: visible !important;
+  max-height: none !important;
 }
 .item {
   display: flex;
@@ -210,7 +200,7 @@ body {
   <div class="header">
     <h1>CartList</h1>
     <div class="header-actions">
-      <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Delete Selected</button>
+      <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Selected</button>
       <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
       <button class="add-top-btn" onclick="toggleForm()">+</button>
     </div>
@@ -257,10 +247,7 @@ function addOrUpdateItem() {
     editingIndex = null;
     button.textContent = "Add";
   } else {
-    items.push({
-      text: text,
-      checked: false
-    });
+    items.push({ text: text, checked: false });
   }
   input.value = "";
   saveItems();
@@ -361,3 +348,5 @@ renderItems();
 </script>
 </body>
 </html>
+
+O botão agora ficou menor como 🗑 Selected para caber melhor na mesma linha.
