@@ -1,15 +1,15 @@
+Aqui está o código completo atualizado com múltiplas listas:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CartList</title>
-
 <style>
 * {
   box-sizing: border-box;
 }
-
 html, body {
   margin: 0;
   padding: 0;
@@ -18,20 +18,17 @@ html, body {
   overflow-x: hidden;
   overflow-y: auto;
 }
-
 body {
   font-family: Arial, sans-serif;
   background: #ffffff;
   color: #222;
 }
-
 .app {
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
-  padding: 72px 14px 14px;
+  padding: 108px 14px 14px;
 }
-
 .header {
   position: fixed;
   top: 0;
@@ -41,27 +38,65 @@ body {
   max-width: 480px;
   z-index: 999;
   background: #ffffff;
+  padding: 10px 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.header-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 5px;
-  padding: 10px 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  margin-bottom: 8px;
 }
-
 .header h1 {
   font-size: 16px;
   margin: 0;
   white-space: nowrap;
 }
-
 .header-actions {
   display: flex;
   align-items: center;
   gap: 4px;
   flex-wrap: nowrap;
 }
-
+.list-selector-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.list-select {
+  flex: 1;
+  height: 30px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  padding: 0 8px;
+  font-size: 12px;
+  background: #fff;
+}
+.new-list-btn,
+.rename-list-btn,
+.delete-list-btn {
+  border: none;
+  border-radius: 8px;
+  height: 30px;
+  padding: 0 7px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.new-list-btn {
+  background: #dcfce7;
+  color: #166534;
+}
+.rename-list-btn {
+  background: #e0f2fe;
+  color: #075985;
+}
+.delete-list-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
 .clear-all-btn,
 .delete-checked-btn {
   border: none;
@@ -73,17 +108,14 @@ body {
   height: 28px;
   white-space: nowrap;
 }
-
 .delete-checked-btn {
   background: #fff7ed;
   color: #c2410c;
 }
-
 .clear-all-btn {
   background: #fee2e2;
   color: #b91c1c;
 }
-
 .add-top-btn {
   width: 28px;
   height: 28px;
@@ -96,7 +128,6 @@ body {
   line-height: 28px;
   cursor: pointer;
 }
-
 .form-card {
   display: none;
   background: #fff;
@@ -105,7 +136,6 @@ body {
   box-shadow: 4px 6px 16px rgba(0,0,0,0.12);
   margin-bottom: 22px;
 }
-
 .form-card input {
   width: 100%;
   padding: 14px;
@@ -114,7 +144,6 @@ body {
   font-size: 16px;
   outline: none;
 }
-
 .add-item-btn {
   margin-top: 12px;
   float: right;
@@ -126,14 +155,12 @@ body {
   font-size: 15px;
   cursor: pointer;
 }
-
 .list {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding-bottom: 30px;
 }
-
 .item {
   display: flex;
   align-items: center;
@@ -143,24 +170,20 @@ body {
   border-radius: 16px;
   box-shadow: 3px 5px 14px rgba(0,0,0,0.10);
 }
-
 .item input[type="checkbox"] {
   width: 22px;
   height: 22px;
   cursor: pointer;
 }
-
 .item span {
   flex: 1;
   font-size: 17px;
   word-break: break-word;
 }
-
 .item.checked span {
   text-decoration: line-through;
   color: #999;
 }
-
 .edit-btn {
   border: none;
   background: #facc15;
@@ -170,7 +193,6 @@ body {
   cursor: pointer;
   font-size: 15px;
 }
-
 .delete-btn {
   border: none;
   background: #ef4444;
@@ -179,7 +201,6 @@ body {
   padding: 8px 10px;
   cursor: pointer;
 }
-
 .modal-bg {
   display: none;
   position: fixed;
@@ -189,7 +210,6 @@ body {
   justify-content: center;
   padding: 20px;
 }
-
 .modal {
   width: 100%;
   max-width: 340px;
@@ -199,17 +219,14 @@ body {
   text-align: center;
   box-shadow: 0 12px 30px rgba(0,0,0,0.2);
 }
-
 .modal p {
   font-size: 17px;
   margin-bottom: 20px;
 }
-
 .modal-buttons {
   display: flex;
   gap: 12px;
 }
-
 .modal-buttons button {
   flex: 1;
   border: none;
@@ -218,95 +235,146 @@ body {
   font-size: 15px;
   cursor: pointer;
 }
-
 .no-btn {
   background: #e5e7eb;
 }
-
 .yes-btn {
   background: #ef4444;
   color: white;
 }
 </style>
 </head>
-
 <body>
-
 <div class="header">
-  <h1>CartList</h1>
-
-  <div class="header-actions">
-    <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Delete Selected</button>
-
-    <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
-
-    <button class="add-top-btn" onclick="toggleForm()">+</button>
+  <div class="header-top">
+    <h1>CartList</h1>
+    <div class="header-actions">
+      <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Delete Selected</button>
+      <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
+      <button class="add-top-btn" onclick="toggleForm()">+</button>
+    </div>
+  </div>
+  <div class="list-selector-row">
+    <select class="list-select" id="listSelect" onchange="switchList()"></select>
+    <button class="new-list-btn" onclick="createNewList()">+ List</button>
+    <button class="rename-list-btn" onclick="renameCurrentList()">Rename</button>
+    <button class="delete-list-btn" onclick="openDeleteListModal()">Delete</button>
   </div>
 </div>
-
 <div class="app">
-
   <div class="form-card" id="formCard">
     <input type="text" id="itemInput" placeholder="Enter an item..." />
-
     <button class="add-item-btn" id="addItemBtn" onclick="addOrUpdateItem()">Add</button>
-
     <div style="clear: both;"></div>
   </div>
-
   <div class="list" id="shoppingList"></div>
-
 </div>
-
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <p id="modalText">Do you really want to delete this item?</p>
-
     <div class="modal-buttons">
       <button class="no-btn" onclick="closeModal()">No</button>
-
       <button class="yes-btn" onclick="confirmAction()">Yes</button>
     </div>
   </div>
 </div>
-
 <script>
-let items = JSON.parse(localStorage.getItem("shoppingList")) || [];
-
+let savedLists = JSON.parse(localStorage.getItem("cartLists"));
+let activeListId = localStorage.getItem("activeListId");
+const oldShoppingList = JSON.parse(localStorage.getItem("shoppingList")) || [];
+if (!savedLists) {
+  savedLists = [
+    {
+      id: Date.now().toString(),
+      name: "My List",
+      items: oldShoppingList
+    }
+  ];
+  activeListId = savedLists[0].id;
+  localStorage.setItem("cartLists", JSON.stringify(savedLists));
+  localStorage.setItem("activeListId", activeListId);
+}
 let itemToDelete = null;
 let editingIndex = null;
 let actionType = null;
-
-function saveItems() {
-  localStorage.setItem("shoppingList", JSON.stringify(items));
+function getActiveList() {
+  return savedLists.find(list => list.id === activeListId) || savedLists[0];
 }
-
+function getItems() {
+  return getActiveList().items;
+}
+function saveItems() {
+  localStorage.setItem("cartLists", JSON.stringify(savedLists));
+  localStorage.setItem("activeListId", activeListId);
+}
+function renderListSelect() {
+  const select = document.getElementById("listSelect");
+  select.innerHTML = "";
+  savedLists.forEach(list => {
+    const option = document.createElement("option");
+    option.value = list.id;
+    option.textContent = list.name;
+    if (list.id === activeListId) {
+      option.selected = true;
+    }
+    select.appendChild(option);
+  });
+}
+function switchList() {
+  activeListId = document.getElementById("listSelect").value;
+  editingIndex = null;
+  document.getElementById("itemInput").value = "";
+  document.getElementById("addItemBtn").textContent = "Add";
+  saveItems();
+  renderItems();
+}
+function createNewList() {
+  const name = prompt("Enter a name for the new list:");
+  if (!name || name.trim() === "") return;
+  const newList = {
+    id: Date.now().toString(),
+    name: name.trim(),
+    items: []
+  };
+  savedLists.push(newList);
+  activeListId = newList.id;
+  saveItems();
+  renderListSelect();
+  renderItems();
+}
+function renameCurrentList() {
+  const activeList = getActiveList();
+  const newName = prompt("Rename this list:", activeList.name);
+  if (!newName || newName.trim() === "") return;
+  activeList.name = newName.trim();
+  saveItems();
+  renderListSelect();
+}
+function openDeleteListModal() {
+  if (savedLists.length <= 1) return;
+  actionType = "deleteList";
+  document.getElementById("modalText").textContent =
+    `Do you really want to delete the list "${getActiveList().name}"?`;
+  document.getElementById("modalBg").style.display = "flex";
+}
 function toggleForm() {
   const form = document.getElementById("formCard");
-
   form.style.display =
     form.style.display === "block" ? "none" : "block";
-
   document.getElementById("itemInput").focus();
 }
-
 function addOrUpdateItem() {
   const input = document.getElementById("itemInput");
-
   const button = document.getElementById("addItemBtn");
-
   const text = input.value.trim();
-
+  const items = getItems();
   if (text === "") {
     input.focus();
     return;
   }
-
   if (editingIndex !== null) {
     items[editingIndex].text = text;
-
     editingIndex = null;
-
     button.textContent = "Add";
   } else {
     items.push({
@@ -314,16 +382,11 @@ function addOrUpdateItem() {
       checked: false
     });
   }
-
   input.value = "";
-
   saveItems();
-
   renderItems();
-
   input.focus();
 }
-
 function escapeHTML(text) {
   return text.replace(/[&<>"']/g, function(match) {
     return {
@@ -335,35 +398,27 @@ function escapeHTML(text) {
     }[match];
   });
 }
-
 function renderItems() {
   const list = document.getElementById("shoppingList");
-
+  const items = getItems();
   list.innerHTML = "";
-
   items.forEach((item, index) => {
-
     const div = document.createElement("div");
-
     div.className =
       "item" + (item.checked ? " checked" : "");
-
     div.innerHTML = `
       <input
         type="checkbox"
         ${item.checked ? "checked" : ""}
         onchange="toggleCheck(${index})"
       >
-
       <span>${escapeHTML(item.text)}</span>
-
       <button
         class="edit-btn"
         onclick="editItem(${index})"
       >
         ✏️
       </button>
-
       <button
         class="delete-btn"
         onclick="openDeleteModal(${index})"
@@ -371,131 +426,97 @@ function renderItems() {
         Delete
       </button>
     `;
-
     list.appendChild(div);
   });
 }
-
 function toggleCheck(index) {
+  const items = getItems();
   items[index].checked = !items[index].checked;
-
   saveItems();
-
   renderItems();
 }
-
 function editItem(index) {
   const form = document.getElementById("formCard");
-
   const input = document.getElementById("itemInput");
-
   const button = document.getElementById("addItemBtn");
-
+  const items = getItems();
   form.style.display = "block";
-
   input.value = items[index].text;
-
   input.focus();
-
   editingIndex = index;
-
   button.textContent = "Save edit";
 }
-
 function openDeleteModal(index) {
   actionType = "single";
-
   itemToDelete = index;
-
   document.getElementById("modalText").textContent =
     "Do you really want to delete this item?";
-
   document.getElementById("modalBg").style.display =
     "flex";
 }
-
 function openDeleteCheckedModal() {
-
+  const items = getItems();
   const selectedCount =
     items.filter(item => item.checked).length;
-
   if (selectedCount === 0) return;
-
   actionType = "checked";
-
   document.getElementById("modalText").textContent =
     `Do you really want to delete ${selectedCount} selected item${selectedCount > 1 ? "s" : ""}?`;
-
   document.getElementById("modalBg").style.display =
     "flex";
 }
-
 function openClearAllModal() {
-
+  const items = getItems();
   if (items.length === 0) return;
-
   actionType = "all";
-
   document.getElementById("modalText").textContent =
     `Do you really want to delete all ${items.length} item${items.length > 1 ? "s" : ""}?`;
-
   document.getElementById("modalBg").style.display =
     "flex";
 }
-
 function closeModal() {
   itemToDelete = null;
-
   actionType = null;
-
   document.getElementById("modalBg").style.display =
     "none";
 }
-
 function confirmAction() {
-
+  const items = getItems();
   if (
     actionType === "single" &&
     itemToDelete !== null
   ) {
     items.splice(itemToDelete, 1);
   }
-
   if (actionType === "checked") {
-    items = items.filter(item => !item.checked);
+    getActiveList().items = items.filter(item => !item.checked);
   }
-
   if (actionType === "all") {
-    items = [];
+    getActiveList().items = [];
   }
-
+  if (actionType === "deleteList") {
+    savedLists = savedLists.filter(list => list.id !== activeListId);
+    activeListId = savedLists[0].id;
+    renderListSelect();
+  }
   editingIndex = null;
-
   document.getElementById("itemInput").value = "";
-
   document.getElementById("addItemBtn").textContent =
     "Add";
-
   saveItems();
-
   renderItems();
-
   closeModal();
 }
-
 document
   .getElementById("itemInput")
   .addEventListener("keydown", function(event) {
-
     if (event.key === "Enter") {
       event.preventDefault();
-
       addOrUpdateItem();
     }
 });
-
+renderListSelect();
 renderItems();
 </script>
-
 </body>
 </html>
