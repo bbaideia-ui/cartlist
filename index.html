@@ -1,5 +1,10 @@
 
+Claro — atualizei com:
 
+* Enter adiciona o item
+* o cursor volta automaticamente para a caixa
+* Delete Checked para apagar os itens marcados
+* mantém a chave "shoppingList" igual, então não deve apagar sua lista atual
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,6 +31,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
+  gap: 12px;
 }
 .header h1 {
   font-size: 26px;
@@ -34,17 +40,24 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
-.clear-all-btn {
+.clear-all-btn,
+.delete-checked-btn {
   border: none;
   border-radius: 14px;
   background: #fee2e2;
   color: #b91c1c;
   padding: 10px 12px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   cursor: pointer;
+}
+.delete-checked-btn {
+  background: #fff7ed;
+  color: #c2410c;
 }
 .add-top-btn {
   width: 42px;
@@ -176,6 +189,7 @@ body {
   <div class="header">
     <h1>CartList</h1>
     <div class="header-actions">
+      <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Checked</button>
       <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
       <button class="add-top-btn" onclick="toggleForm()">+</button>
     </div>
@@ -213,7 +227,10 @@ function addOrUpdateItem() {
   const input = document.getElementById("itemInput");
   const button = document.getElementById("addItemBtn");
   const text = input.value.trim();
-  if (text === "") return;
+  if (text === "") {
+    input.focus();
+    return;
+  }
   if (editingIndex !== null) {
     items[editingIndex].text = text;
     editingIndex = null;
@@ -227,6 +244,18 @@ function addOrUpdateItem() {
   input.value = "";
   saveItems();
   renderItems();
+  input.focus();
+}
+function escapeHTML(text) {
+  return text.replace(/[&<>"']/g, function(match) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[match];
+  });
 }
 function renderItems() {
   const list = document.getElementById("shoppingList");
@@ -236,7 +265,7 @@ function renderItems() {
     div.className = "item" + (item.checked ? " checked" : "");
     div.innerHTML = `
       <input type="checkbox" ${item.checked ? "checked" : ""} onchange="toggleCheck(${index})">
-      <span>${item.text}</span>
+      <span>${escapeHTML(item.text)}</span>
       <button class="edit-btn" onclick="editItem(${index})">✏️</button>
       <button class="delete-btn" onclick="openDeleteModal(${index})">Delete</button>
     `;
@@ -264,6 +293,13 @@ function openDeleteModal(index) {
   document.getElementById("modalText").textContent = "Do you really want to delete this item?";
   document.getElementById("modalBg").style.display = "flex";
 }
+function openDeleteCheckedModal() {
+  const hasCheckedItems = items.some(item => item.checked);
+  if (!hasCheckedItems) return;
+  actionType = "checked";
+  document.getElementById("modalText").textContent = "Do you really want to delete checked items?";
+  document.getElementById("modalBg").style.display = "flex";
+}
 function openClearAllModal() {
   if (items.length === 0) return;
   actionType = "all";
@@ -279,6 +315,9 @@ function confirmAction() {
   if (actionType === "single" && itemToDelete !== null) {
     items.splice(itemToDelete, 1);
   }
+  if (actionType === "checked") {
+    items = items.filter(item => !item.checked);
+  }
   if (actionType === "all") {
     items = [];
   }
@@ -289,7 +328,14 @@ function confirmAction() {
   renderItems();
   closeModal();
 }
+document.getElementById("itemInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    addOrUpdateItem();
+  }
+});
 renderItems();
 </script>
 </body>
 </html>
+
