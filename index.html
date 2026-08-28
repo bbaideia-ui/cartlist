@@ -1,15 +1,16 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CartList</title>
+
 <style>
 * {
   box-sizing: border-box;
 }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -18,17 +19,20 @@ html, body {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
 body {
   font-family: Arial, sans-serif;
   background: #ffffff;
   color: #222;
 }
+
 .app {
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
   padding: 144px 14px 14px;
 }
+
 .header {
   position: fixed;
   top: 0;
@@ -41,6 +45,7 @@ body {
   padding: 10px 14px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
+
 .header-top {
   display: flex;
   align-items: center;
@@ -48,17 +53,20 @@ body {
   gap: 5px;
   margin-bottom: 8px;
 }
+
 .header h1 {
   font-size: 16px;
   margin: 0;
   white-space: nowrap;
 }
+
 .header-actions {
   display: flex;
   align-items: center;
   gap: 4px;
   flex-wrap: nowrap;
 }
+
 .list-selector-row,
 .backup-row {
   display: flex;
@@ -66,6 +74,7 @@ body {
   align-items: center;
   margin-top: 6px;
 }
+
 .list-select {
   flex: 1;
   height: 30px;
@@ -75,6 +84,7 @@ body {
   font-size: 12px;
   background: #fff;
 }
+
 .new-list-btn,
 .rename-list-btn,
 .delete-list-btn,
@@ -89,26 +99,32 @@ body {
   cursor: pointer;
   white-space: nowrap;
 }
+
 .new-list-btn {
   background: #dcfce7;
   color: #166534;
 }
+
 .rename-list-btn {
   background: #e0f2fe;
   color: #075985;
 }
+
 .delete-list-btn {
   background: #fee2e2;
   color: #b91c1c;
 }
+
 .export-backup-btn {
   background: #fef9c3;
   color: #854d0e;
 }
+
 .import-backup-btn {
   background: #ede9fe;
   color: #5b21b6;
 }
+
 .clear-all-btn,
 .delete-checked-btn {
   border: none;
@@ -120,14 +136,17 @@ body {
   height: 28px;
   white-space: nowrap;
 }
+
 .delete-checked-btn {
   background: #fff7ed;
   color: #c2410c;
 }
+
 .clear-all-btn {
   background: #fee2e2;
   color: #b91c1c;
 }
+
 .add-top-btn {
   width: 28px;
   height: 28px;
@@ -140,6 +159,7 @@ body {
   line-height: 28px;
   cursor: pointer;
 }
+
 .form-card {
   display: none;
   background: #fff;
@@ -148,6 +168,7 @@ body {
   box-shadow: 4px 6px 16px rgba(0,0,0,0.12);
   margin-bottom: 22px;
 }
+
 .form-card input {
   width: 100%;
   padding: 14px;
@@ -156,6 +177,7 @@ body {
   font-size: 16px;
   outline: none;
 }
+
 .add-item-btn {
   margin-top: 12px;
   float: right;
@@ -167,12 +189,14 @@ body {
   font-size: 15px;
   cursor: pointer;
 }
+
 .list {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding-bottom: 30px;
 }
+
 .item {
   display: flex;
   align-items: center;
@@ -182,20 +206,24 @@ body {
   border-radius: 16px;
   box-shadow: 3px 5px 14px rgba(0,0,0,0.10);
 }
+
 .item input[type="checkbox"] {
   width: 22px;
   height: 22px;
   cursor: pointer;
 }
+
 .item span {
   flex: 1;
   font-size: 17px;
   word-break: break-word;
 }
+
 .item.checked span {
   text-decoration: line-through;
   color: #999;
 }
+
 .edit-btn {
   border: none;
   background: #facc15;
@@ -205,6 +233,7 @@ body {
   cursor: pointer;
   font-size: 15px;
 }
+
 .delete-btn {
   border: none;
   background: #ef4444;
@@ -213,6 +242,7 @@ body {
   padding: 8px 10px;
   cursor: pointer;
 }
+
 .modal-bg {
   display: none;
   position: fixed;
@@ -222,6 +252,7 @@ body {
   justify-content: center;
   padding: 20px;
 }
+
 .modal {
   width: 100%;
   max-width: 340px;
@@ -231,14 +262,17 @@ body {
   text-align: center;
   box-shadow: 0 12px 30px rgba(0,0,0,0.2);
 }
+
 .modal p {
   font-size: 17px;
   margin-bottom: 20px;
 }
+
 .modal-buttons {
   display: flex;
   gap: 12px;
 }
+
 .modal-buttons button {
   flex: 1;
   border: none;
@@ -247,62 +281,392 @@ body {
   font-size: 15px;
   cursor: pointer;
 }
+
 .no-btn {
   background: #e5e7eb;
 }
+
 .yes-btn {
   background: #ef4444;
   color: white;
 }
+
 .hidden-file-input {
   display: none;
 }
+
+
+/* =========================
+   TRASH
+   ========================= */
+
+.trash-btn {
+  border: none;
+  border-radius: 8px;
+  height: 30px;
+  padding: 0 7px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.trash-modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 3000;
+}
+
+.trash-modal {
+  width: 100%;
+  max-width: 450px;
+  max-height: 85vh;
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.trash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.trash-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.close-trash-btn {
+  border: none;
+  background: #e5e7eb;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.trash-info {
+  font-size: 12px;
+  color: #666;
+  margin: 0 0 12px;
+}
+
+.trash-list {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trash-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.trash-item-title {
+  font-size: 16px;
+  font-weight: bold;
+  word-break: break-word;
+  margin-bottom: 5px;
+}
+
+.trash-item-info {
+  font-size: 11px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.trash-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.restore-btn {
+  flex: 1;
+  border: none;
+  border-radius: 9px;
+  padding: 9px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.delete-forever-btn {
+  flex: 1;
+  border: none;
+  border-radius: 9px;
+  padding: 9px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.empty-trash-btn {
+  margin-top: 14px;
+  border: none;
+  border-radius: 10px;
+  padding: 11px;
+  background: #ef4444;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.empty-trash-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.trash-empty {
+  text-align: center;
+  color: #888;
+  padding: 30px 10px;
+  font-size: 14px;
+}
+
 </style>
 </head>
+
 <body>
+
 <div class="header">
+
   <div class="header-top">
     <h1>CartList</h1>
+
     <div class="header-actions">
-      <button class="delete-checked-btn" onclick="openDeleteCheckedModal()">🗑 Delete Selected</button>
-      <button class="clear-all-btn" onclick="openClearAllModal()">🗑 Clear All</button>
-      <button class="add-top-btn" onclick="toggleForm()">+</button>
+      <button
+        class="delete-checked-btn"
+        onclick="openDeleteCheckedModal()"
+      >
+        🗑 Delete Selected
+      </button>
+
+      <button
+        class="clear-all-btn"
+        onclick="openClearAllModal()"
+      >
+        🗑 Clear All
+      </button>
+
+      <button
+        class="add-top-btn"
+        onclick="toggleForm()"
+      >
+        +
+      </button>
     </div>
   </div>
+
   <div class="list-selector-row">
-    <select class="list-select" id="listSelect" onchange="switchList()"></select>
-    <button class="new-list-btn" onclick="createNewList()">+ List</button>
-    <button class="rename-list-btn" onclick="renameCurrentList()">Rename</button>
-    <button class="delete-list-btn" onclick="openDeleteListModal()">Delete</button>
+
+    <select
+      class="list-select"
+      id="listSelect"
+      onchange="switchList()"
+    ></select>
+
+    <button
+      class="new-list-btn"
+      onclick="createNewList()"
+    >
+      + List
+    </button>
+
+    <button
+      class="rename-list-btn"
+      onclick="renameCurrentList()"
+    >
+      Rename
+    </button>
+
+    <button
+      class="delete-list-btn"
+      onclick="openDeleteListModal()"
+    >
+      Delete
+    </button>
+
   </div>
+
   <div class="backup-row">
-    <button class="export-backup-btn" onclick="exportBackup()">Export Backup</button>
-    <button class="import-backup-btn" onclick="openImportBackup()">Import Backup</button>
-    <input class="hidden-file-input" type="file" id="backupFileInput" accept=".json,application/json" onchange="importBackup(event)">
+
+    <button
+      class="export-backup-btn"
+      onclick="exportBackup()"
+    >
+      Export Backup
+    </button>
+
+    <button
+      class="import-backup-btn"
+      onclick="openImportBackup()"
+    >
+      Import Backup
+    </button>
+
+    <button
+      class="trash-btn"
+      onclick="openTrash()"
+    >
+      🗑 Trash
+    </button>
+
+    <input
+      class="hidden-file-input"
+      type="file"
+      id="backupFileInput"
+      accept=".json,application/json"
+      onchange="importBackup(event)"
+    >
+
   </div>
+
 </div>
+
+
 <div class="app">
-  <div class="form-card" id="formCard">
-    <input type="text" id="itemInput" placeholder="Enter an item..." />
-    <button class="add-item-btn" id="addItemBtn" onclick="addOrUpdateItem()">Add</button>
+
+  <div
+    class="form-card"
+    id="formCard"
+  >
+
+    <input
+      type="text"
+      id="itemInput"
+      placeholder="Enter an item..."
+    />
+
+    <button
+      class="add-item-btn"
+      id="addItemBtn"
+      onclick="addOrUpdateItem()"
+    >
+      Add
+    </button>
+
     <div style="clear: both;"></div>
+
   </div>
-  <div class="list" id="shoppingList"></div>
+
+  <div
+    class="list"
+    id="shoppingList"
+  ></div>
+
 </div>
-<div class="modal-bg" id="modalBg">
+
+
+<div
+  class="modal-bg"
+  id="modalBg"
+>
+
   <div class="modal">
-    <p id="modalText">Do you really want to delete this item?</p>
+
+    <p id="modalText">
+      Do you really want to delete this item?
+    </p>
+
     <div class="modal-buttons">
-      <button class="no-btn" onclick="closeModal()">No</button>
-      <button class="yes-btn" onclick="confirmAction()">Yes</button>
+
+      <button
+        class="no-btn"
+        onclick="closeModal()"
+      >
+        No
+      </button>
+
+      <button
+        class="yes-btn"
+        onclick="confirmAction()"
+      >
+        Yes
+      </button>
+
     </div>
+
   </div>
+
 </div>
+
+
+<!-- TRASH -->
+
+<div
+  class="trash-modal-bg"
+  id="trashModalBg"
+>
+
+  <div class="trash-modal">
+
+    <div class="trash-header">
+
+      <h2>Trash</h2>
+
+      <button
+        class="close-trash-btn"
+        onclick="closeTrash()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <p class="trash-info">
+      Deleted items are kept for 30 days.
+    </p>
+
+    <div
+      class="trash-list"
+      id="trashList"
+    ></div>
+
+    <button
+      class="empty-trash-btn"
+      id="emptyTrashBtn"
+      onclick="emptyTrash()"
+    >
+      Empty Trash
+    </button>
+
+  </div>
+
+</div>
+
+
 <script>
-let savedLists = JSON.parse(localStorage.getItem("cartLists"));
-let activeListId = localStorage.getItem("activeListId");
-const oldShoppingList = JSON.parse(localStorage.getItem("shoppingList")) || [];
+
+let savedLists =
+  JSON.parse(localStorage.getItem("cartLists"));
+
+let activeListId =
+  localStorage.getItem("activeListId");
+
+const oldShoppingList =
+  JSON.parse(localStorage.getItem("shoppingList")) || [];
+
+
 if (!savedLists) {
+
   savedLists = [
     {
       id: Date.now().toString(),
@@ -310,290 +674,1327 @@ if (!savedLists) {
       items: oldShoppingList
     }
   ];
+
   activeListId = savedLists[0].id;
-  localStorage.setItem("cartLists", JSON.stringify(savedLists));
-  localStorage.setItem("activeListId", activeListId);
+
+  localStorage.setItem(
+    "cartLists",
+    JSON.stringify(savedLists)
+  );
+
+  localStorage.setItem(
+    "activeListId",
+    activeListId
+  );
+
 }
+
+
 let itemToDelete = null;
 let editingIndex = null;
 let actionType = null;
+
+
+/* =========================
+   TRASH DATA
+   ========================= */
+
+let trashItems =
+  JSON.parse(localStorage.getItem("cartTrash")) || [];
+
+const TRASH_LIFETIME =
+  30 * 24 * 60 * 60 * 1000;
+
+
+function saveTrash() {
+
+  localStorage.setItem(
+    "cartTrash",
+    JSON.stringify(trashItems)
+  );
+
+}
+
+
+function cleanExpiredTrash() {
+
+  const now = Date.now();
+
+  trashItems = trashItems.filter(entry => {
+
+    return (
+      now - entry.deletedAt <
+      TRASH_LIFETIME
+    );
+
+  });
+
+  saveTrash();
+
+}
+
+
+function addItemToTrash(
+  item,
+  index,
+  listId,
+  listName
+) {
+
+  trashItems.push({
+
+    id:
+      Date.now().toString() +
+      Math.random().toString(16).slice(2),
+
+    type: "item",
+
+    item: {
+      ...item
+    },
+
+    originalIndex: index,
+    listId: listId,
+    listName: listName,
+
+    deletedAt: Date.now()
+
+  });
+
+  saveTrash();
+
+}
+
+
+function addListToTrash(list) {
+
+  trashItems.push({
+
+    id:
+      Date.now().toString() +
+      Math.random().toString(16).slice(2),
+
+    type: "list",
+
+    list: JSON.parse(
+      JSON.stringify(list)
+    ),
+
+    deletedAt: Date.now()
+
+  });
+
+  saveTrash();
+
+}
+
+
 function getActiveList() {
-  return savedLists.find(list => list.id === activeListId) || savedLists[0];
+
+  return savedLists.find(
+    list => list.id === activeListId
+  ) || savedLists[0];
+
 }
+
+
 function getItems() {
+
   return getActiveList().items;
+
 }
+
+
 function saveItems() {
-  localStorage.setItem("cartLists", JSON.stringify(savedLists));
-  localStorage.setItem("activeListId", activeListId);
+
+  localStorage.setItem(
+    "cartLists",
+    JSON.stringify(savedLists)
+  );
+
+  localStorage.setItem(
+    "activeListId",
+    activeListId
+  );
+
 }
+
+
 function renderListSelect() {
-  const select = document.getElementById("listSelect");
+
+  const select =
+    document.getElementById("listSelect");
+
   select.innerHTML = "";
+
   savedLists.forEach(list => {
-    const option = document.createElement("option");
+
+    const option =
+      document.createElement("option");
+
     option.value = list.id;
     option.textContent = list.name;
+
     if (list.id === activeListId) {
       option.selected = true;
     }
+
     select.appendChild(option);
+
   });
+
 }
+
+
 function switchList() {
-  activeListId = document.getElementById("listSelect").value;
+
+  activeListId =
+    document.getElementById(
+      "listSelect"
+    ).value;
+
   editingIndex = null;
-  document.getElementById("itemInput").value = "";
-  document.getElementById("addItemBtn").textContent = "Add";
+
+  document.getElementById(
+    "itemInput"
+  ).value = "";
+
+  document.getElementById(
+    "addItemBtn"
+  ).textContent = "Add";
+
   saveItems();
   renderItems();
+
 }
+
+
 function createNewList() {
-  const name = prompt("Enter a name for the new list:");
-  if (!name || name.trim() === "") return;
+
+  const name =
+    prompt(
+      "Enter a name for the new list:"
+    );
+
+  if (
+    !name ||
+    name.trim() === ""
+  ) return;
+
   const newList = {
+
     id: Date.now().toString(),
+
     name: name.trim(),
+
     items: []
+
   };
+
   savedLists.push(newList);
+
   activeListId = newList.id;
+
   saveItems();
   renderListSelect();
   renderItems();
+
 }
+
+
 function renameCurrentList() {
-  const activeList = getActiveList();
-  const newName = prompt("Rename this list:", activeList.name);
-  if (!newName || newName.trim() === "") return;
-  activeList.name = newName.trim();
+
+  const activeList =
+    getActiveList();
+
+  const newName =
+    prompt(
+      "Rename this list:",
+      activeList.name
+    );
+
+  if (
+    !newName ||
+    newName.trim() === ""
+  ) return;
+
+  activeList.name =
+    newName.trim();
+
   saveItems();
   renderListSelect();
+
 }
+
+
 function openDeleteListModal() {
-  if (savedLists.length <= 1) return;
+
+  if (
+    savedLists.length <= 1
+  ) return;
+
   actionType = "deleteList";
-  document.getElementById("modalText").textContent =
+
+  document.getElementById(
+    "modalText"
+  ).textContent =
     `Do you really want to delete the list "${getActiveList().name}"?`;
-  document.getElementById("modalBg").style.display = "flex";
+
+  document.getElementById(
+    "modalBg"
+  ).style.display = "flex";
+
 }
+
+
 function toggleForm() {
-  const form = document.getElementById("formCard");
+
+  const form =
+    document.getElementById(
+      "formCard"
+    );
+
   form.style.display =
-    form.style.display === "block" ? "none" : "block";
-  document.getElementById("itemInput").focus();
+    form.style.display === "block"
+      ? "none"
+      : "block";
+
+  document.getElementById(
+    "itemInput"
+  ).focus();
+
 }
+
+
 function addOrUpdateItem() {
-  const input = document.getElementById("itemInput");
-  const button = document.getElementById("addItemBtn");
-  const text = input.value.trim();
-  const items = getItems();
+
+  const input =
+    document.getElementById(
+      "itemInput"
+    );
+
+  const button =
+    document.getElementById(
+      "addItemBtn"
+    );
+
+  const text =
+    input.value.trim();
+
+  const items =
+    getItems();
+
   if (text === "") {
+
     input.focus();
     return;
+
   }
-  if (editingIndex !== null) {
-    items[editingIndex].text = text;
+
+  if (
+    editingIndex !== null
+  ) {
+
+    items[editingIndex].text =
+      text;
+
     editingIndex = null;
-    button.textContent = "Add";
+
+    button.textContent =
+      "Add";
+
   } else {
+
     items.push({
+
       text: text,
+
       checked: false
+
     });
+
   }
+
   input.value = "";
+
   saveItems();
   renderItems();
   input.focus();
+
 }
+
+
 function escapeHTML(text) {
-  return text.replace(/[&<>"']/g, function(match) {
-    return {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    }[match];
-  });
+
+  return text.replace(
+    /[&<>"']/g,
+    function(match) {
+
+      return {
+
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+
+      }[match];
+
+    }
+  );
+
 }
+
+
 function renderItems() {
-  const list = document.getElementById("shoppingList");
-  const items = getItems();
+
+  const list =
+    document.getElementById(
+      "shoppingList"
+    );
+
+  const items =
+    getItems();
+
   list.innerHTML = "";
-  items.forEach((item, index) => {
-    const div = document.createElement("div");
-    div.className =
-      "item" + (item.checked ? " checked" : "");
-    div.innerHTML = `
-      <input
-        type="checkbox"
-        ${item.checked ? "checked" : ""}
-        onchange="toggleCheck(${index})"
-      >
-      <span>${escapeHTML(item.text)}</span>
-      <button
-        class="edit-btn"
-        onclick="editItem(${index})"
-      >
-        ✏️
-      </button>
-      <button
-        class="delete-btn"
-        onclick="openDeleteModal(${index})"
-      >
-        Delete
-      </button>
-    `;
-    list.appendChild(div);
-  });
+
+  items.forEach(
+    (item, index) => {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "item" +
+        (
+          item.checked
+            ? " checked"
+            : ""
+        );
+
+      div.innerHTML = `
+        <input
+          type="checkbox"
+          ${item.checked ? "checked" : ""}
+          onchange="toggleCheck(${index})"
+        >
+
+        <span>
+          ${escapeHTML(item.text)}
+        </span>
+
+        <button
+          class="edit-btn"
+          onclick="editItem(${index})"
+        >
+          ✏️
+        </button>
+
+        <button
+          class="delete-btn"
+          onclick="openDeleteModal(${index})"
+        >
+          Delete
+        </button>
+      `;
+
+      list.appendChild(div);
+
+    }
+  );
+
 }
+
+
 function toggleCheck(index) {
-  const items = getItems();
-  items[index].checked = !items[index].checked;
+
+  const items =
+    getItems();
+
+  items[index].checked =
+    !items[index].checked;
+
   saveItems();
   renderItems();
+
 }
+
+
 function editItem(index) {
-  const form = document.getElementById("formCard");
-  const input = document.getElementById("itemInput");
-  const button = document.getElementById("addItemBtn");
-  const items = getItems();
-  form.style.display = "block";
-  input.value = items[index].text;
+
+  const form =
+    document.getElementById(
+      "formCard"
+    );
+
+  const input =
+    document.getElementById(
+      "itemInput"
+    );
+
+  const button =
+    document.getElementById(
+      "addItemBtn"
+    );
+
+  const items =
+    getItems();
+
+  form.style.display =
+    "block";
+
+  input.value =
+    items[index].text;
+
   input.focus();
-  editingIndex = index;
-  button.textContent = "Save edit";
+
+  editingIndex =
+    index;
+
+  button.textContent =
+    "Save edit";
+
 }
+
+
 function openDeleteModal(index) {
-  actionType = "single";
-  itemToDelete = index;
-  document.getElementById("modalText").textContent =
+
+  actionType =
+    "single";
+
+  itemToDelete =
+    index;
+
+  document.getElementById(
+    "modalText"
+  ).textContent =
     "Do you really want to delete this item?";
-  document.getElementById("modalBg").style.display =
+
+  document.getElementById(
+    "modalBg"
+  ).style.display =
     "flex";
+
 }
+
+
 function openDeleteCheckedModal() {
-  const items = getItems();
+
+  const items =
+    getItems();
+
   const selectedCount =
-    items.filter(item => item.checked).length;
-  if (selectedCount === 0) return;
-  actionType = "checked";
-  document.getElementById("modalText").textContent =
+    items.filter(
+      item => item.checked
+    ).length;
+
+  if (
+    selectedCount === 0
+  ) return;
+
+  actionType =
+    "checked";
+
+  document.getElementById(
+    "modalText"
+  ).textContent =
     `Do you really want to delete ${selectedCount} selected item${selectedCount > 1 ? "s" : ""}?`;
-  document.getElementById("modalBg").style.display =
+
+  document.getElementById(
+    "modalBg"
+  ).style.display =
     "flex";
+
 }
+
+
 function openClearAllModal() {
-  const items = getItems();
-  if (items.length === 0) return;
-  actionType = "all";
-  document.getElementById("modalText").textContent =
+
+  const items =
+    getItems();
+
+  if (
+    items.length === 0
+  ) return;
+
+  actionType =
+    "all";
+
+  document.getElementById(
+    "modalText"
+  ).textContent =
     `Do you really want to delete all ${items.length} item${items.length > 1 ? "s" : ""}?`;
-  document.getElementById("modalBg").style.display =
+
+  document.getElementById(
+    "modalBg"
+  ).style.display =
     "flex";
+
 }
+
+
 function closeModal() {
+
   itemToDelete = null;
+
   actionType = null;
-  document.getElementById("modalBg").style.display =
+
+  document.getElementById(
+    "modalBg"
+  ).style.display =
     "none";
+
 }
+
+
 function confirmAction() {
-  const items = getItems();
+
+  const items =
+    getItems();
+
+  const activeList =
+    getActiveList();
+
+
   if (
     actionType === "single" &&
     itemToDelete !== null
   ) {
-    items.splice(itemToDelete, 1);
+
+    addItemToTrash(
+      items[itemToDelete],
+      itemToDelete,
+      activeList.id,
+      activeList.name
+    );
+
+    items.splice(
+      itemToDelete,
+      1
+    );
+
   }
-  if (actionType === "checked") {
-    getActiveList().items = items.filter(item => !item.checked);
+
+
+  if (
+    actionType === "checked"
+  ) {
+
+    items.forEach(
+      (item, index) => {
+
+        if (
+          item.checked
+        ) {
+
+          addItemToTrash(
+            item,
+            index,
+            activeList.id,
+            activeList.name
+          );
+
+        }
+
+      }
+    );
+
+    getActiveList().items =
+      items.filter(
+        item => !item.checked
+      );
+
   }
-  if (actionType === "all") {
-    getActiveList().items = [];
+
+
+  if (
+    actionType === "all"
+  ) {
+
+    items.forEach(
+      (item, index) => {
+
+        addItemToTrash(
+          item,
+          index,
+          activeList.id,
+          activeList.name
+        );
+
+      }
+    );
+
+    getActiveList().items =
+      [];
+
   }
-  if (actionType === "deleteList") {
-    savedLists = savedLists.filter(list => list.id !== activeListId);
-    activeListId = savedLists[0].id;
+
+
+  if (
+    actionType === "deleteList"
+  ) {
+
+    addListToTrash(
+      getActiveList()
+    );
+
+    savedLists =
+      savedLists.filter(
+        list =>
+          list.id !==
+          activeListId
+      );
+
+    activeListId =
+      savedLists[0].id;
+
     renderListSelect();
+
   }
+
+
   editingIndex = null;
-  document.getElementById("itemInput").value = "";
-  document.getElementById("addItemBtn").textContent =
+
+  document.getElementById(
+    "itemInput"
+  ).value = "";
+
+  document.getElementById(
+    "addItemBtn"
+  ).textContent =
     "Add";
+
   saveItems();
   renderItems();
   closeModal();
+
 }
+
+
+/* =========================
+   TRASH INTERFACE
+   ========================= */
+
+function openTrash() {
+
+  cleanExpiredTrash();
+
+  renderTrash();
+
+  document.getElementById(
+    "trashModalBg"
+  ).style.display =
+    "flex";
+
+}
+
+
+function closeTrash() {
+
+  document.getElementById(
+    "trashModalBg"
+  ).style.display =
+    "none";
+
+}
+
+
+function getTrashDaysRemaining(
+  deletedAt
+) {
+
+  const age =
+    Date.now() - deletedAt;
+
+  const remaining =
+    TRASH_LIFETIME - age;
+
+  return Math.max(
+    0,
+    Math.ceil(
+      remaining /
+      (
+        24 *
+        60 *
+        60 *
+        1000
+      )
+    )
+  );
+
+}
+
+
+function renderTrash() {
+
+  cleanExpiredTrash();
+
+  const container =
+    document.getElementById(
+      "trashList"
+    );
+
+  const emptyButton =
+    document.getElementById(
+      "emptyTrashBtn"
+    );
+
+  container.innerHTML =
+    "";
+
+  if (
+    trashItems.length === 0
+  ) {
+
+    container.innerHTML =
+      `<div class="trash-empty">
+        Trash is empty.
+      </div>`;
+
+    emptyButton.disabled =
+      true;
+
+    return;
+
+  }
+
+  emptyButton.disabled =
+    false;
+
+
+  const orderedTrash =
+    [...trashItems].sort(
+      (a, b) =>
+        b.deletedAt -
+        a.deletedAt
+    );
+
+
+  orderedTrash.forEach(
+    entry => {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "trash-item";
+
+
+      let title =
+        "";
+
+      let source =
+        "";
+
+
+      if (
+        entry.type === "item"
+      ) {
+
+        title =
+          entry.item.text;
+
+        source =
+          `From: ${entry.listName}`;
+
+      }
+
+
+      if (
+        entry.type === "list"
+      ) {
+
+        title =
+          `List: ${entry.list.name}`;
+
+        source =
+          `${entry.list.items.length} item${entry.list.items.length !== 1 ? "s" : ""}`;
+
+      }
+
+
+      const days =
+        getTrashDaysRemaining(
+          entry.deletedAt
+        );
+
+
+      div.innerHTML = `
+
+        <div class="trash-item-title">
+          ${escapeHTML(title)}
+        </div>
+
+        <div class="trash-item-info">
+          ${escapeHTML(source)}
+          • ${days} day${days !== 1 ? "s" : ""} remaining
+        </div>
+
+        <div class="trash-item-actions">
+
+          <button
+            class="restore-btn"
+            onclick="restoreTrashItem('${entry.id}')"
+          >
+            Restore
+          </button>
+
+          <button
+            class="delete-forever-btn"
+            onclick="deleteTrashItemForever('${entry.id}')"
+          >
+            Delete Forever
+          </button>
+
+        </div>
+
+      `;
+
+      container.appendChild(
+        div
+      );
+
+    }
+  );
+
+}
+
+
+function restoreTrashItem(id) {
+
+  const entry =
+    trashItems.find(
+      item => item.id === id
+    );
+
+  if (!entry) return;
+
+
+  if (
+    entry.type === "item"
+  ) {
+
+    let targetList =
+      savedLists.find(
+        list =>
+          list.id ===
+          entry.listId
+      );
+
+
+    if (!targetList) {
+
+      targetList = {
+
+        id:
+          Date.now().toString(),
+
+        name:
+          entry.listName +
+          " (Restored)",
+
+        items: []
+
+      };
+
+      savedLists.push(
+        targetList
+      );
+
+    }
+
+
+    const restoreIndex =
+      Math.min(
+        entry.originalIndex,
+        targetList.items.length
+      );
+
+
+    targetList.items.splice(
+
+      restoreIndex,
+
+      0,
+
+      {
+        ...entry.item,
+        checked: false
+      }
+
+    );
+
+  }
+
+
+  if (
+    entry.type === "list"
+  ) {
+
+    let restoredList =
+      JSON.parse(
+        JSON.stringify(
+          entry.list
+        )
+      );
+
+
+    if (
+      savedLists.find(
+        list =>
+          list.id ===
+          restoredList.id
+      )
+    ) {
+
+      restoredList.id =
+        Date.now().toString();
+
+    }
+
+
+    let restoredName =
+      restoredList.name;
+
+    let number =
+      2;
+
+
+    while (
+      savedLists.some(
+        list =>
+          list.name ===
+          restoredName
+      )
+    ) {
+
+      restoredName =
+        `${restoredList.name} (${number})`;
+
+      number++;
+
+    }
+
+
+    restoredList.name =
+      restoredName;
+
+
+    savedLists.push(
+      restoredList
+    );
+
+  }
+
+
+  trashItems =
+    trashItems.filter(
+      item =>
+        item.id !== id
+    );
+
+
+  saveTrash();
+  saveItems();
+  renderListSelect();
+  renderItems();
+  renderTrash();
+
+}
+
+
+function deleteTrashItemForever(
+  id
+) {
+
+  const confirmed =
+    confirm(
+      "Delete this permanently? This cannot be undone."
+    );
+
+  if (!confirmed) return;
+
+
+  trashItems =
+    trashItems.filter(
+      item =>
+        item.id !== id
+    );
+
+
+  saveTrash();
+  renderTrash();
+
+}
+
+
+function emptyTrash() {
+
+  if (
+    trashItems.length === 0
+  ) return;
+
+
+  const confirmed =
+    confirm(
+      "Permanently delete everything in Trash? This cannot be undone."
+    );
+
+
+  if (!confirmed) return;
+
+
+  trashItems = [];
+
+  saveTrash();
+  renderTrash();
+
+}
+
+
 function exportBackup() {
+
   const backupData = {
+
     app: "CartList",
+
     version: 1,
-    exportedAt: new Date().toISOString(),
-    activeListId: activeListId,
-    lists: savedLists
+
+    exportedAt:
+      new Date().toISOString(),
+
+    activeListId:
+      activeListId,
+
+    lists:
+      savedLists
+
   };
-  const json = JSON.stringify(backupData, null, 2);
-  const blob = new Blob([json], {
-    type: "application/json"
-  });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  const date = new Date().toISOString().slice(0, 10);
-  link.href = url;
-  link.download = `cartlist-backup-${date}.json`;
-  document.body.appendChild(link);
+
+
+  const json =
+    JSON.stringify(
+      backupData,
+      null,
+      2
+    );
+
+
+  const blob =
+    new Blob(
+      [json],
+      {
+        type:
+          "application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  const date =
+    new Date()
+      .toISOString()
+      .slice(0, 10);
+
+
+  link.href =
+    url;
+
+
+  link.download =
+    `cartlist-backup-${date}.json`;
+
+
+  document.body.appendChild(
+    link
+  );
+
+
   link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+
+
+  document.body.removeChild(
+    link
+  );
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
 }
+
+
 function openImportBackup() {
-  document.getElementById("backupFileInput").click();
+
+  document.getElementById(
+    "backupFileInput"
+  ).click();
+
 }
+
+
 function importBackup(event) {
-  const file = event.target.files[0];
+
+  const file =
+    event.target.files[0];
+
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const backup = JSON.parse(e.target.result);
-      if (!backup.lists || !Array.isArray(backup.lists)) {
-        alert("Invalid backup file.");
-        return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(e) {
+
+      try {
+
+        const backup =
+          JSON.parse(
+            e.target.result
+          );
+
+
+        if (
+          !backup.lists ||
+          !Array.isArray(
+            backup.lists
+          )
+        ) {
+
+          alert(
+            "Invalid backup file."
+          );
+
+          return;
+
+        }
+
+
+        savedLists =
+          backup.lists;
+
+
+        activeListId =
+          backup.activeListId ||
+          savedLists[0].id;
+
+
+        if (
+          !savedLists.find(
+            list =>
+              list.id ===
+              activeListId
+          )
+        ) {
+
+          activeListId =
+            savedLists[0].id;
+
+        }
+
+
+        editingIndex =
+          null;
+
+        itemToDelete =
+          null;
+
+        actionType =
+          null;
+
+
+        document.getElementById(
+          "itemInput"
+        ).value = "";
+
+
+        document.getElementById(
+          "addItemBtn"
+        ).textContent =
+          "Add";
+
+
+        saveItems();
+
+        renderListSelect();
+
+        renderItems();
+
+
+        alert(
+          "Backup imported successfully."
+        );
+
+
+      } catch (error) {
+
+        alert(
+          "Could not import this backup file."
+        );
+
       }
-      savedLists = backup.lists;
-      activeListId = backup.activeListId || savedLists[0].id;
-      if (!savedLists.find(list => list.id === activeListId)) {
-        activeListId = savedLists[0].id;
-      }
-      editingIndex = null;
-      itemToDelete = null;
-      actionType = null;
-      document.getElementById("itemInput").value = "";
-      document.getElementById("addItemBtn").textContent = "Add";
-      saveItems();
-      renderListSelect();
-      renderItems();
-      alert("Backup imported successfully.");
-    } catch (error) {
-      alert("Could not import this backup file.");
-    }
-    event.target.value = "";
-  };
-  reader.readAsText(file);
+
+
+      event.target.value =
+        "";
+
+    };
+
+
+  reader.readAsText(
+    file
+  );
+
 }
+
+
 document
-  .getElementById("itemInput")
-  .addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      addOrUpdateItem();
+  .getElementById(
+    "itemInput"
+  )
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        event.preventDefault();
+
+        addOrUpdateItem();
+
+      }
+
     }
-});
+  );
+
+
+cleanExpiredTrash();
+
 renderListSelect();
+
 renderItems();
+
 </script>
+
 </body>
 </html>
