@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -313,6 +312,26 @@ body {
   color: #374151;
 }
 
+/* TRASH COUNTER */
+.trash-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 3px;
+  border-radius: 50px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.trash-count:empty {
+  display: none;
+}
+
 .trash-modal-bg {
   display: none;
   position: fixed;
@@ -527,6 +546,10 @@ body {
       onclick="openTrash()"
     >
       🗑 Trash
+      <span
+        class="trash-count"
+        id="trashCount"
+      ></span>
     </button>
 
     <input
@@ -712,6 +735,32 @@ function saveTrash() {
     "cartTrash",
     JSON.stringify(trashItems)
   );
+
+  updateTrashCount();
+
+}
+
+
+/* TRASH COUNTER */
+function updateTrashCount() {
+
+  const counter =
+    document.getElementById("trashCount");
+
+  if (!counter) return;
+
+  const count =
+    trashItems.length;
+
+  if (count === 0) {
+
+    counter.textContent = "";
+
+  } else {
+
+    counter.textContent = count;
+
+  }
 
 }
 
@@ -1989,6 +2038,8 @@ document
 
 
 cleanExpiredTrash();
+
+updateTrashCount();
 
 renderListSelect();
 
